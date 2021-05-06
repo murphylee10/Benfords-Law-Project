@@ -5,12 +5,16 @@
  * Description: A customer sales information that makes use of Benford's Law and Java APIs
  * */
 
+import javafx.application.Application;
 import java.util.Scanner;
 
-class CustomerSystem {
+class CustomerSystem extends Application {
     public static void main(String[] args) {
-        String userChoice;           // Which menu option the user has chosen
-        boolean keepGoing = true;    // Ensures that the while loop runs at least once
+        String userChoice;              // Which menu option the user has chosen
+        boolean keepGoing = true;       // Ensures that the while loop runs at least once
+        String getSalesOption = "1";    // If the user wants the data from CSV file
+        String checkSalesOption = "2";  // If the user wants to check the sales data for digit frequency
+        String quitOption = "3";        // If the user wants to exit the program 
 
         // Instantiate Scanner
         Scanner reader = new Scanner(System.in);
@@ -22,6 +26,10 @@ class CustomerSystem {
             userChoice = reader.nextLine();
             
             // Prompt the user for re-input as long as their choice is invalid (not a number from 1 - 3)
+            while (!(userChoice.equals(getSalesOption) || userChoice.equals(checkSalesOption) || userChoice.equals(quitOption))) {
+                System.out.println("Invalid input. Please enter a number from the options menu: ");
+                userChoice = reader.nextLine();
+            }
 
             // If the user entered 1, read the sales data
 
