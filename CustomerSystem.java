@@ -6,6 +6,8 @@
  * */
 
 import javafx.application.Application;
+import javafx.stage.Stage;
+
 import java.util.Scanner;
 
 class CustomerSystem extends Application {
@@ -67,6 +69,30 @@ class CustomerSystem extends Application {
      * @author - Murphy Lee
      * */
     public static void checkSales() {
+        // Read the sales column of the CSV file, parsing the first digit and storing in an array/data structure
 
+        // Sort the array in ascending order
+
+        // Find number of numbers in the array
+
+        // Calculate the frequency of each first digit
+
+        // Store frequencies in an array
+
+        // Display to terminal whether fraud occured
+
+        // Return array
     }
+    /*
+        * Description:
+        * 
+        * @author - Murphy Lee
+        * 
+        * */
+    @Override
+    public void start(Stage arg0) throws Exception {
+        
+    }
+
+    
 }
