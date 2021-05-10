@@ -8,10 +8,11 @@
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-class CustomerSystem extends Application {
+class CustomerSystem {
     public static void main(String[] args) throws FileNotFoundException{
         String userChoice;              // Which menu option the user has chosen
         boolean keepGoing = true;       // Ensures that the while loop runs at least once
@@ -72,13 +73,37 @@ class CustomerSystem extends Application {
      * @throws FileNotFoundException - Exception raised when the program tries to read the CSV, thrown to main
      * */
     public static void checkSales(Scanner scanner) throws FileNotFoundException {
-
         int totalDigits = 0;            // Accumulator variable to help calculate frequency
         int[] firstDigits = new int[9];   // Stores the number of occurences of each first digit
+        String fileName = "sales.csv";    // The file name of the CSV
+        String line;                      // Stores each line of the file
+        Scanner lineReader;               // Scanner takes in each line of the CSV
+        int salesNum;                     // Stores each sales number
+        int digit;                        // Stores each digit
 
-        // Read the sales column of the CSV file, parsing the first digit and storing in an array
-        
+        // Open the CSV file into the Scanner
+        File file = new File(fileName);
+        scanner = new Scanner(file);
 
+
+        scanner.nextLine();    // Skip the first line of the CSV (spreadsheet headers)
+
+        // Read the sales column of the CSV file, parsing the first digit and storing in an array  
+        while (scanner.hasNextLine() == true) {
+            // Read the next line of the file
+            line = scanner.nextLine();
+
+            // Store each line into the Scanner - use the useDelimiter() functon
+            lineReader = new Scanner(line);
+            lineReader.useDelimiter(",");
+
+            lineReader.next(); // Skip to the next token of the line (the sales number)
+
+            // Pass the sales value into nextInt
+            salesNum = lineReader.nextInt();
+            System.out.println(salesNum);
+
+        }
         // Calculate the frequency of each first digit
 
         // Store frequencies in an array
@@ -89,14 +114,14 @@ class CustomerSystem extends Application {
     }
 
     /*
-     * Description:
+     * Description: Reads through the file, finds the first digit of the sales value, and finds the occurence of each digit
      * 
      * @author - Murphy Lee
      * @throws FileNotFoundException - Exception raised when the program tries to read the CSV, thrown to checkSales()
      * */
-    public static void countFirstDigit(int arr[] ) {
+    // public static void countFirstDigit(int arr[], Scanner scanner) {
 
-    }
+    // }
 
     /*
         * Description:
@@ -104,10 +129,10 @@ class CustomerSystem extends Application {
         * @author - Murphy Lee
         * 
         * */
-    @Override
-    public void start(Stage arg0) throws Exception {
+    // @Override
+    // public void start(Stage arg0) throws Exception {
         
-    }
+    // }
 
     
 }
