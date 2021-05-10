@@ -7,7 +7,6 @@
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import jdk.net.NetworkPermission;
 
 import java.io.File;
 import java.io.FileNotFoundException;
