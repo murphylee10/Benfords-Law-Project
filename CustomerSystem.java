@@ -8,10 +8,11 @@
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 class CustomerSystem extends Application {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException{
         String userChoice;              // Which menu option the user has chosen
         boolean keepGoing = true;       // Ensures that the while loop runs at least once
         String getSalesOption = "1";    // If the user wants the data from CSV file
@@ -67,13 +68,16 @@ class CustomerSystem extends Application {
      * Description:
      * 
      * @author - Murphy Lee
+     * @param scanner - The Scanner used to read from the file
+     * @throws FileNotFoundException - Exception raised when the program tries to read the CSV, thrown to main
      * */
-    public static void checkSales() {
-        // Read the sales column of the CSV file, parsing the first digit and storing in an array/data structure
+    public static void checkSales(Scanner scanner) throws FileNotFoundException {
 
-        // Sort the array in ascending order
+        int totalDigits = 0;            // Accumulator variable to help calculate frequency
+        int[] firstDigits = new int[9];   // Stores the number of occurences of each first digit
 
-        // Find number of numbers in the array
+        // Read the sales column of the CSV file, parsing the first digit and storing in an array
+        
 
         // Calculate the frequency of each first digit
 
@@ -83,6 +87,17 @@ class CustomerSystem extends Application {
 
         // Return array
     }
+
+    /*
+     * Description:
+     * 
+     * @author - Murphy Lee
+     * @throws FileNotFoundException - Exception raised when the program tries to read the CSV, thrown to checkSales()
+     * */
+    public static void countFirstDigit(int arr[] ) {
+
+    }
+
     /*
         * Description:
         * 
