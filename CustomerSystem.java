@@ -5,9 +5,11 @@
  * Description: A customer sales information that makes use of Benford's Law and Java APIs
  * */
 import javafx.application.Application;
+import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -217,7 +219,7 @@ class CustomerSystem extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) throws FileNotFoundException {
         // Find the frequency of each digit
         double[] firstDigitFreq = checkSales();
 
@@ -229,9 +231,32 @@ class CustomerSystem extends Application {
         NumberAxis yAxis = new NumberAxis();
 
         // Create bar chart object
-        BarChart<Integer, Double> barChart = new BarChart<>(xAxis, yAxis);
+        BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
         barChart.setTitle("Benford's Law Distribution of Leading Digit");
-        
+
+        // Set the axis labels
+        xAxis.setLabel("Digit");
+        yAxis.setLabel("Percentage Frequency");
+
+        // Create instance of XYChart object to store data
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+
+        // Add data to the series object
+        series.getData().add(new XYChart.Data<String, Number>("1", firstDigitFreq[0]));
+        series.getData().add(new XYChart.Data<String, Number>("2", firstDigitFreq[1]));
+        series.getData().add(new XYChart.Data<String, Number>("3", firstDigitFreq[2]));
+        series.getData().add(new XYChart.Data<String, Number>("4", firstDigitFreq[3]));
+        series.getData().add(new XYChart.Data<String, Number>("5", firstDigitFreq[4]));
+        series.getData().add(new XYChart.Data<String, Number>("6", firstDigitFreq[5]));
+        series.getData().add(new XYChart.Data<String, Number>("7", firstDigitFreq[6]));
+        series.getData().add(new XYChart.Data<String, Number>("8", firstDigitFreq[7]));
+        series.getData().add(new XYChart.Data<String, Number>("9", firstDigitFreq[8]));
+
+        // Feed the barChart node to the scene
+        Scene scene = new Scene(barChart, 800, 600);
+        barChart.getData().add(series);
+        primaryStage.setScene(scene);
+        primaryStage.show();
         
     }
 }
