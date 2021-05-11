@@ -47,7 +47,6 @@ public class CustomerSystem extends Application {
                 getSalesData("sales.csv");
             }
 
-
             // If the user entered 2, set the keepGoing variable to false
             else if (userChoice.equals("2")) {
                 // Run the checkSales function and store the frequencies in an array
@@ -60,6 +59,14 @@ public class CustomerSystem extends Application {
             }
         }
         reader.close();
+    }
+    /* 
+    * Description: Prints out the user options to the terminal
+    * 
+    * @author - Naomi Mezheritsky
+    * */
+    public static void printMenu() {
+
     }
 
     @Override
@@ -107,23 +114,13 @@ public class CustomerSystem extends Application {
     }
 
     /* 
-     * Description: 
+     * Description: Takes a header and an array of doubles, and exports both to a CSV file
      * 
-     * @author - Naomi mezheritsky
-     * 
-     * */
-    public static void reportPercentage(List<Integer> salesData, String fileName) {
-
-    }
-
-    /* 
-     * Description: 
-     * 
-     * @author - 
+     * @author - Murphy Lee
      * 
      * */
-    public static void printMenu() {
-
+    public static void exportPercentage(double[] arr, String header) {
+        
     }
 
     /*
@@ -224,22 +221,6 @@ public class CustomerSystem extends Application {
     }
 
     /*
-     * Description: Finds the first digit of any integer
-     * 
-     * @author - Murphy Lee
-     * @param num - The number whose first digit needs to be found
-     * @return num - The first digit
-     * */
-    public static int getFirstDigit(int num) {
-        // Loop while the number is greater than 10
-        while (num >= 10) {
-            num /= 10;
-        }
-        // Return the digit
-        return num;
-    }
-
-    /*
      * Description: Finds the percentage of each item in an array, and returns them as a seperate array
      * 
      * @author - Murphy Lee
@@ -260,5 +241,19 @@ public class CustomerSystem extends Application {
         return newArr;
     }
 
-    
+    /*
+     * Description: Finds the first digit of any integer
+     * 
+     * @author - Murphy Lee
+     * @param num - The number whose first digit needs to be found
+     * @return num - The first digit
+     * */
+    public static int getFirstDigit(int num) {
+        // Loop while the number is greater than 10
+        while (num >= 10) {
+            num /= 10;
+        }
+        // Return the digit
+        return num;
+    }
 }
