@@ -5,6 +5,9 @@
  * Description: A customer sales information that makes use of Benford's Law and Java APIs
  * */
 import javafx.application.Application;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
 import javafx.stage.Stage;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -214,15 +217,21 @@ class CustomerSystem extends Application {
     }
 
     @Override
-    public void start(Stage arg0) throws Exception {
+    public void start(Stage primaryStage) throws Exception {
         // Find the frequency of each digit
         double[] firstDigitFreq = checkSales();
 
-        for (int i = 0; i < firstDigitFreq.length; i++) {
-            System.out.println("Line " + (i + 1) + ": " + firstDigitFreq[i]);
-        }
+        // Set up the new stage
+        primaryStage.setTitle("Benford's Law");
+
+        // Create x-axis and y-axis objects
+        CategoryAxis xAxis = new CategoryAxis();
+        NumberAxis yAxis = new NumberAxis();
+
+        // Create bar chart object
+        BarChart<Integer, Double> barChart = new BarChart<>(xAxis, yAxis);
+        barChart.setTitle("Benford's Law Distribution of Leading Digit");
+        
         
     }
-
-    
 }
