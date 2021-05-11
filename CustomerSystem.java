@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-class CustomerSystem {
+class CustomerSystem extends Application {
     public static void main(String[] args) throws FileNotFoundException{
         String userChoice;           // Which menu option the user has chosen
         boolean keepGoing = true;    // Ensures that the while loop runs at least once
@@ -46,9 +46,8 @@ class CustomerSystem {
             // If the user entered 2, set the keepGoing variable to false
             else if (userChoice.equals("2")) {
                 // Run the checkSales function and store the frequencies in an array
-                double[] firstDigitFreq = checkSales(reader);
-
-
+                
+                launch(args);
             }
 
             // Otherwise, the user entered 3 and wants to quit the program
@@ -121,10 +120,9 @@ class CustomerSystem {
      * Description:
      * 
      * @author - Murphy Lee
-     * @param scanner - The Scanner used to read from the file
      * @throws FileNotFoundException - Exception raised when the program tries to read the CSV, thrown to main
      * */
-    public static double[] checkSales(Scanner scanner) throws FileNotFoundException {
+    public static double[] checkSales() throws FileNotFoundException {
         int totalDigits = 0;            // Accumulator variable to help calculate frequency
         int[] firstDigits = new int[9];   // Stores the number of occurences of each first  
         double[] digitFrequency = new double[9];
@@ -136,14 +134,14 @@ class CustomerSystem {
 
         // Open the CSV file into the Scanner
         File file = new File(fileName);
-        scanner = new Scanner(file);
+        Scanner reader = new Scanner(file);
 
-        scanner.nextLine();    // Skip the first line of the CSV (spreadsheet headers)
+        reader.nextLine();    // Skip the first line of the CSV (spreadsheet headers)
 
         // Read the sales column of the CSV file, parsing the first digit and storing in an array  
-        while (scanner.hasNextLine() == true) {
+        while (reader.hasNextLine() == true) {
             // Read the next line of the file
-            line = scanner.nextLine();
+            line = reader.nextLine();
             // Store each line into the Scanner - use the useDelimiter() functon
             lineReader = new Scanner(line);
             lineReader.useDelimiter(",");
@@ -153,9 +151,7 @@ class CustomerSystem {
             salesNum = lineReader.nextInt();
             
             digit = getFirstDigit(salesNum);
-            System.out.println(digit);
-            // System.out.println("Line " + (totalDigits + 1) + ": " + digit);
-
+            
             // Increase the corresponding value of the array by 1
             firstDigits[digit - 1]++;
 
@@ -173,6 +169,8 @@ class CustomerSystem {
             System.out.println("Fraud has occured");
         }
         // Export results to a seperate CSV file
+
+        reader.close();
 
         // Return array
         return digitFrequency;
@@ -207,8 +205,23 @@ class CustomerSystem {
 
         for (int i = 0; i < newArr.length; i++) {
             newArr[i] = ((1.0 * arr[i]) / total) * 100;     // Divide num / total and multiply by 100%
+
+            // Round to one decimal place
+            newArr[i] = Math.round(newArr[i] * 10.0) / 10.0;
         }
+
         return newArr;
+    }
+
+    @Override
+    public void start(Stage arg0) throws Exception {
+        // Find the frequency of each digit
+        double[] firstDigitFreq = checkSales();
+
+        for (int i = 0; i < firstDigitFreq.length; i++) {
+            System.out.println("Line " + (i + 1) + ": " + firstDigitFreq[i]);
+        }
+        
     }
 
     
