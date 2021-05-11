@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-class CustomerSystem extends Application {
+public class CustomerSystem extends Application {
     public static void main(String[] args) throws FileNotFoundException{
         String userChoice;           // Which menu option the user has chosen
         boolean keepGoing = true;    // Ensures that the while loop runs at least once
@@ -51,7 +51,6 @@ class CustomerSystem extends Application {
             // If the user entered 2, set the keepGoing variable to false
             else if (userChoice.equals("2")) {
                 // Run the checkSales function and store the frequencies in an array
-                
                 launch(args);
             }
 
@@ -60,10 +59,53 @@ class CustomerSystem extends Application {
                 keepGoing = false;
             }
         }
-
         reader.close();
     }
-    
+
+    @Override
+    public void start(Stage primaryStage) throws FileNotFoundException {
+        String digitMark;    // Stores each digit as a string to be used as X-axis labels
+
+        // Find the frequency of each digit
+        double[] firstDigitFreq = checkSales();
+
+        // Set up the new stage
+        primaryStage.setTitle("Benford's Law");
+
+        // Create x-axis and y-axis objects
+        CategoryAxis xAxis = new CategoryAxis();
+        NumberAxis yAxis = new NumberAxis();
+
+        // Create bar chart object
+        BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
+        barChart.setTitle("Benford's Law Distribution of Leading Digit");
+
+        // Set the axis labels
+        xAxis.setLabel("Digit");
+        yAxis.setLabel("Percentage Frequency (%)");
+
+        // Create instance of XYChart object to store data
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("First Digit Frequencies");
+
+        // Add data to the series object
+        for (int i = 0; i < firstDigitFreq.length; i++) {
+            digitMark = String.valueOf((i + 1));
+            series.getData().add(new XYChart.Data<String, Number>(digitMark, firstDigitFreq[i]));
+        }
+
+        // Feed the barChart node to the scene
+        Scene scene = new Scene(barChart, 800, 600);
+
+        // Add the series object (data) to the barChart object
+        barChart.getData().add(series);
+
+        // Add scene to the stage, and display it to the screen
+        primaryStage.setScene(scene);
+        primaryStage.show();
+        
+    }
+
     /* 
      * Description: 
      * 
@@ -139,14 +181,14 @@ class CustomerSystem extends Application {
 
         // Open the CSV file into the Scanner
         File file = new File(fileName);
-        Scanner reader = new Scanner(file);
+        Scanner scanner = new Scanner(file);
 
-        reader.nextLine();    // Skip the first line of the CSV (spreadsheet headers)
+        scanner.nextLine();    // Skip the first line of the CSV (spreadsheet headers)
 
         // Read the sales column of the CSV file, parsing the first digit and storing in an array  
-        while (reader.hasNextLine() == true) {
+        while (scanner.hasNextLine() == true) {
             // Read the next line of the file
-            line = reader.nextLine();
+            line = scanner.nextLine();
             // Store each line into the Scanner - use the useDelimiter() functon
             lineReader = new Scanner(line);
             lineReader.useDelimiter(",");
@@ -175,7 +217,7 @@ class CustomerSystem extends Application {
         }
         // Export results to a seperate CSV file
 
-        reader.close();
+        scanner.close();
 
         // Return array
         return digitFrequency;
@@ -218,45 +260,5 @@ class CustomerSystem extends Application {
         return newArr;
     }
 
-    @Override
-    public void start(Stage primaryStage) throws FileNotFoundException {
-        // Find the frequency of each digit
-        double[] firstDigitFreq = checkSales();
-
-        // Set up the new stage
-        primaryStage.setTitle("Benford's Law");
-
-        // Create x-axis and y-axis objects
-        CategoryAxis xAxis = new CategoryAxis();
-        NumberAxis yAxis = new NumberAxis();
-
-        // Create bar chart object
-        BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
-        barChart.setTitle("Benford's Law Distribution of Leading Digit");
-
-        // Set the axis labels
-        xAxis.setLabel("Digit");
-        yAxis.setLabel("Percentage Frequency");
-
-        // Create instance of XYChart object to store data
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-
-        // Add data to the series object
-        series.getData().add(new XYChart.Data<String, Number>("1", firstDigitFreq[0]));
-        series.getData().add(new XYChart.Data<String, Number>("2", firstDigitFreq[1]));
-        series.getData().add(new XYChart.Data<String, Number>("3", firstDigitFreq[2]));
-        series.getData().add(new XYChart.Data<String, Number>("4", firstDigitFreq[3]));
-        series.getData().add(new XYChart.Data<String, Number>("5", firstDigitFreq[4]));
-        series.getData().add(new XYChart.Data<String, Number>("6", firstDigitFreq[5]));
-        series.getData().add(new XYChart.Data<String, Number>("7", firstDigitFreq[6]));
-        series.getData().add(new XYChart.Data<String, Number>("8", firstDigitFreq[7]));
-        series.getData().add(new XYChart.Data<String, Number>("9", firstDigitFreq[8]));
-
-        // Feed the barChart node to the scene
-        Scene scene = new Scene(barChart, 800, 600);
-        barChart.getData().add(series);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-        
-    }
+    
 }
