@@ -41,7 +41,7 @@ public class CustomerSystem extends Application {
 
             // If the user entered 1 read data from the sales.csv file            
             if (userChoice.equals("1")) {
-                getSalesData("sales.csv");
+                getSalesData("sales.csv"); 
                 System.out.println(); //skips a line for aesthetic
                 System.out.println("Data has been loaded succesfully..."); //informs user data has been loaded
                 System.out.println(); //skips a line for aesthetic
@@ -98,9 +98,8 @@ public class CustomerSystem extends Application {
                 if (fields[1].equals("Sales")) {
                     continue; 
                 }
-                String postalCode = fields[0];
                 Integer sales = Integer.valueOf(fields[1]);
-                System.out.println(postalCode + ": " + sales);
+                System.out.println(sales);
                 dataList.add(sales); //adds sales to dataList   
             } //end of while loop
             
