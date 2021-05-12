@@ -14,6 +14,7 @@ import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class CustomerSystem extends Application {
@@ -26,7 +27,7 @@ public class CustomerSystem extends Application {
 
         // Loop through user options as long as the user wants to keep going
         while (keepGoing == true) {
-            // Print user options
+            // Print user options and prompt input
             printMenu();
             userChoice = reader.nextLine();
             
@@ -53,7 +54,9 @@ public class CustomerSystem extends Application {
             }
         }
         reader.close();
+        System.exit(0);   // Closes the program if the user's graph stage still remains
     }
+
     /* 
     * Description: Prints out the user options to the terminal
     * 
@@ -67,12 +70,58 @@ public class CustomerSystem extends Application {
     	System.out.println("    3: Quit");
     }
 
+    /*
+    * Description: reads sales data and adds it to the list 
+    * 
+    * @author - Naomi Mezheritsky
+    * @param fileName - The file name of the file to be read
+    * */
+    public static void getSalesData(String fileName) {
+        String delimeter = ","; //declares delimeter as a String
+        File f = new File(fileName); // initializes object of class File based on the given file name
+
+        try { //start of try block
+            Scanner reader = new Scanner(f);
+
+            //beginning of while loop	
+            while (reader.hasNext()) { //creates a loop for hasNext
+                String line = reader.nextLine();
+                String[] fields = line.split(delimeter); //creates an array of fields separated by "," (a comma)
+                if (fields[1].equals("Sales")) {
+                    continue; 
+                }
+                Integer sales = Integer.valueOf(fields[1]);
+                System.out.println(sales);   
+            } //end of while loop
+            
+            reader.close(); //closes reader
+
+        } //end of try block
+
+        catch (FileNotFoundException ex) { //catch block for "FileNotFoundException" exception
+            ex.printStackTrace();
+        }
+    }
+
+    /*
+     * Description: Combination of the validation of user data with the visual representation of digit frequencies
+     * 
+     * @author - Murphy Lee
+     * @throws FileNotFoundException - Passed by the exportPercentage() and checkSales() methods, thrown to main
+     * @param primaryStage - The platform (window) used to draw on for JAVAFX applications
+     * */
     @Override
     public void start(Stage primaryStage) throws FileNotFoundException {
         String digitMark;    // Stores each digit as a string to be used as X-axis labels
+        String tableHeader;  // Table header of the CSV
 
         // Find the frequency of each digit
         double[] firstDigitFreq = checkSales();
+
+        // Export results to CSV file
+        tableHeader = "Digit,Frequency(%)";
+        exportPercentage(firstDigitFreq, tableHeader);
+        System.out.println("Results successfully exported to 'results.csv'. Now loading graph...");
 
         // Set up the new stage
         primaryStage.setTitle("Benford's Law");
@@ -108,59 +157,13 @@ public class CustomerSystem extends Application {
         // Add scene to the stage, and display it to the screen
         primaryStage.setScene(scene);
         primaryStage.show();
-        
     }
-
-    /* 
-     * Description: Takes a header and an array of doubles, and exports both to a CSV file
-     * 
-     * @author - Murphy Lee
-     * 
-     * */
-    public static void exportPercentage(double[] arr, String header) {
-        
-    }
-
     /*
-     * Description: reads sales data and adds it to the list 
-     * 
-     * @author - Naomi Mezheritsky
-     * */
-    public static void getSalesData(String fileName) {
-    	String delimeter = ","; //declares delimeter as a String
-    	File f = new File(fileName); // initializes object of class File based on the given file name
-
-    	try { //start of try block
-    		Scanner reader = new Scanner(f);
-
-    		//beginning of while loop	
-    		while (reader.hasNext()) { //creates a loop for hasNext
-    			String line = reader.nextLine();
-    			String[] fields = line.split(delimeter); //creates an array of fields separated by "," (a comma)
-    			if (fields[1].equals("Sales")) {
-    				continue; 
-    			}
-    			Integer sales = Integer.valueOf(fields[1]);
-    			System.out.println(sales);   
-    		} //end of while loop
-    		
-    		reader.close(); //closes reader
-
-    	} //end of try block
-
-    	catch (FileNotFoundException ex) { //catch block for "FileNotFoundException" exception
-    		ex.printStackTrace();
-    	}
-
-
-    } 
-
-    /*
-     * Description:
-     * 
-     * @author - Murphy Lee
-     * @throws FileNotFoundException - Exception raised when the program tries to read the CSV, thrown to main
-     * */
+    * Description:
+    * 
+    * @author - Murphy Lee
+    * @throws FileNotFoundException - Exception raised when the program tries to read the CSV, thrown to start method
+    * */
     public static double[] checkSales() throws FileNotFoundException {
         int totalDigits = 0;            // Accumulator variable to help calculate frequency
         int[] firstDigits = new int[9];   // Stores the number of occurences of each first  
@@ -207,12 +210,38 @@ public class CustomerSystem extends Application {
         else {
             System.out.println("Fraud has occured");
         }
-        // Export results to a seperate CSV file
 
         scanner.close();
 
         // Return array
         return digitFrequency;
+    }
+
+    /* 
+     * Description: Takes a header and an array of doubles, and exports both to a CSV file
+     * 
+     * @author - Murphy Lee
+     * @throws FileNotFoundException - Exception raised when method tries to pass File to PrintWriter, thrown to start method
+     * @param arr - Array containing the double values (the digits in this case)
+     * @param header - The categories that go onto the top of the CSV
+     * */
+    public static void exportPercentage(double[] arr, String header) throws FileNotFoundException {
+        String fileName = "results.csv";     // Name of the results file
+        // Open file
+        File file = new File(fileName);
+
+        // Pass file into printwriter
+        PrintWriter writeFile = new PrintWriter(file);
+
+        // Create the file header
+        writeFile.println(header);
+
+        // Loop through array values, printing results
+        for (int i = 0; i < arr.length; i++) {
+            writeFile.println((i + 1) + "," + arr[i]);     // Index starts at 0, so +1 needs to be added
+        }
+
+        writeFile.close();
     }
 
     /*
