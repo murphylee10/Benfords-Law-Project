@@ -135,7 +135,7 @@ public class CustomerSystem extends Application {
         } // End of try block
 
         catch (FileNotFoundException ex) { // Catch block for "FileNotFoundException" exception
-            ex.printStackTrace();
+            System.out.println("Could not find file - Empty results will be used..."); // Tells user file isn't found
         }
         return dataList; // Returns dataList
     }
