@@ -60,8 +60,8 @@ public class CustomerSystem extends Application {
     * 
     * @author - Naomi Mezheritsky
     * */
-    public static void printMenu() {
-        System.out.println();
+    public static void printMenu() { //shows the user their options
+        System.out.println(); 
         System.out.println("Please select one of the options: ");
     	System.out.println("    1: Retrive sales data from the file");
     	System.out.println("    2: Check for fraud in sales data and display results in a graph");
