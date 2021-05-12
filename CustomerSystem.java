@@ -36,13 +36,8 @@ public class CustomerSystem extends Application {
                 System.out.println("User input is invalid. Enter one of the choices (1 - 3): ");
                 userChoice = reader.nextLine();
             }
-
-            /* If the user entered 1:
-             *     - read sales data from sales.csv file
-             *     - based on the input from sales.csv analyze the sales with Benford's law
-             *     - generate results.csv
-             */
             
+            // If the user entered 1 read data from the sales.csv file            
             if (userChoice.equals("1")) {
                 getSalesData("sales.csv");
             }
@@ -66,7 +61,10 @@ public class CustomerSystem extends Application {
     * @author - Naomi Mezheritsky
     * */
     public static void printMenu() {
-
+        System.out.println("Please select one of the options: ");
+    	System.out.println("    1: Retrive sales data from the file");
+    	System.out.println("    2: Check for fraud in sales data and display results in a graph");
+    	System.out.println("    3: Quit");
     }
 
     @Override
@@ -124,7 +122,7 @@ public class CustomerSystem extends Application {
     }
 
     /*
-     * Description: 
+     * Description: reads sales data and adds it to the list 
      * 
      * @author - Naomi Mezheritsky
      * */
@@ -141,10 +139,10 @@ public class CustomerSystem extends Application {
     			String line = reader.nextLine();
     			String[] fields = line.split(delimeter); //creates an array of fields separated by "," (a comma)
     			if (fields[1].equals("Sales")) {
-    				continue; // 
+    				continue; 
     			}
     			Integer sales = Integer.valueOf(fields[1]);
-    			//System.out.println(sales);   MAYBE
+    			System.out.println(sales);   
     			dataList.add(sales); //adds sales to dataList
     		} //end of while loop
     		
