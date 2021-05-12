@@ -36,7 +36,7 @@ public class CustomerSystem extends Application {
                 System.out.println("User input is invalid. Enter one of the choices (1 - 3): ");
                 userChoice = reader.nextLine();
             }
-            
+
             // If the user entered 1 read data from the sales.csv file            
             if (userChoice.equals("1")) {
                 getSalesData("sales.csv");
@@ -61,6 +61,7 @@ public class CustomerSystem extends Application {
     * @author - Naomi Mezheritsky
     * */
     public static void printMenu() {
+        System.out.println();
         System.out.println("Please select one of the options: ");
     	System.out.println("    1: Retrive sales data from the file");
     	System.out.println("    2: Check for fraud in sales data and display results in a graph");
