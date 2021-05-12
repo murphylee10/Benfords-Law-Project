@@ -4,6 +4,7 @@
  * Teacher: Mr. Ho
  * Description: A customer sales information that makes use of Benford's Law and Java APIs
  * */
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
@@ -13,8 +14,6 @@ import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class CustomerSystem extends Application {
@@ -127,10 +126,9 @@ public class CustomerSystem extends Application {
      * 
      * @author - Naomi Mezheritsky
      * */
-    public static List<Integer> getSalesData(String fileName) {
+    public static void getSalesData(String fileName) {
     	String delimeter = ","; //declares delimeter as a String
     	File f = new File(fileName); // initializes object of class File based on the given file name
-    	List<Integer> dataList = new ArrayList<>(); //dataList is declared by a new ArrayList
 
     	try { //start of try block
     		Scanner reader = new Scanner(f);
@@ -144,7 +142,6 @@ public class CustomerSystem extends Application {
     			}
     			Integer sales = Integer.valueOf(fields[1]);
     			System.out.println(sales);   
-    			dataList.add(sales); //adds sales to dataList
     		} //end of while loop
     		
     		reader.close(); //closes reader
@@ -155,7 +152,6 @@ public class CustomerSystem extends Application {
     		ex.printStackTrace();
     	}
 
-    	return dataList; //returns dataList
 
     } 
 
