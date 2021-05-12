@@ -15,6 +15,8 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List; 
 import java.util.Scanner;
 
 public class CustomerSystem extends Application {
@@ -40,6 +42,10 @@ public class CustomerSystem extends Application {
             // If the user entered 1 read data from the sales.csv file            
             if (userChoice.equals("1")) {
                 getSalesData("sales.csv");
+                System.out.println(); //skips a line for aesthetic
+                System.out.println("Data has been loaded succesfully..."); //informs user data has been loaded
+                System.out.println(); //skips a line for aesthetic
+
             }
 
             // If the user entered 2, set the keepGoing variable to false
@@ -50,6 +56,7 @@ public class CustomerSystem extends Application {
 
             // Otherwise, the user entered 3 and wants to quit the program
             else {
+                System.out.println("Goodbye!");
                 keepGoing = false;
             }
         }
@@ -76,9 +83,10 @@ public class CustomerSystem extends Application {
     * @author - Naomi Mezheritsky
     * @param fileName - The file name of the file to be read
     * */
-    public static void getSalesData(String fileName) {
+    public static List<Integer> getSalesData(String fileName) {
         String delimeter = ","; //declares delimeter as a String
         File f = new File(fileName); // initializes object of class File based on the given file name
+        List<Integer> dataList = new ArrayList<>(); //dataList is declared by a new ArrayList
 
         try { //start of try block
             Scanner reader = new Scanner(f);
@@ -90,8 +98,10 @@ public class CustomerSystem extends Application {
                 if (fields[1].equals("Sales")) {
                     continue; 
                 }
+                String postalCode = fields[0];
                 Integer sales = Integer.valueOf(fields[1]);
-                System.out.println(sales);   
+                System.out.println(postalCode + ": " + sales);
+                dataList.add(sales); //adds sales to dataList   
             } //end of while loop
             
             reader.close(); //closes reader
@@ -101,6 +111,7 @@ public class CustomerSystem extends Application {
         catch (FileNotFoundException ex) { //catch block for "FileNotFoundException" exception
             ex.printStackTrace();
         }
+        return dataList; //returns dataList
     }
 
     /*
@@ -220,7 +231,7 @@ public class CustomerSystem extends Application {
     /* 
      * Description: Takes a header and an array of doubles, and exports both to a CSV file
      * 
-     * @author - Murphy Lee
+     * @author - Naomi Mezheritsky
      * @throws FileNotFoundException - Exception raised when method tries to pass File to PrintWriter, thrown to start method
      * @param arr - Array containing the double values (the digits in this case)
      * @param header - The categories that go onto the top of the CSV
