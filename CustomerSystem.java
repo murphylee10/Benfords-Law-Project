@@ -49,7 +49,9 @@ public class CustomerSystem extends Application {
 
         // Get the sales data and read the file's contents to the terminal
         salesData = getSalesData(salesName);
+        System.out.println();                                      // Empty print line for aesthetic
         System.out.println("Data has been loaded succesfully..."); // Informs user that data has been loaded
+        System.out.println();                                      // Empty print line for aesthetic
 
         // Run the checkSales function and store the frequencies in an array
         double[] firstDigitFreq = checkSales(salesData);
@@ -100,52 +102,54 @@ public class CustomerSystem extends Application {
     }
 
     /*
-    * Description: reads sales data and adds it to the list 
+    * Description: Reads sales data and adds it to the ArrayList 
     * 
     * @author - Naomi Mezheritsky
     * @param fileName - The file name of the file to be read
     * */
     public static ArrayList<Integer> getSalesData(String fileName) {
-        String delimeter = ","; //declares delimeter as a String
-        File f = new File(fileName); // initializes object of class File based on the given file name
-        ArrayList<Integer> dataList = new ArrayList<>(); //dataList is declared by a new ArrayList
+        String delimeter = ","; // Declares delimeter as a String
+        File f = new File(fileName); // Initializes object of class File based on the given file name
+        ArrayList<Integer> dataList = new ArrayList<>(); // dataList is declared by a new ArrayList
 
-        try { //start of try block
+        // Start of try block
+        try { 
             Scanner reader = new Scanner(f);
 
-            //beginning of while loop	
-            while (reader.hasNext()) { //creates a loop for hasNext
+            // Beginning of while loop	
+            while (reader.hasNext()) { // Creates a loop for hasNext
                 String line = reader.nextLine();
-                String[] fields = line.split(delimeter); //creates an array of fields separated by "," (a comma)
+                String[] fields = line.split(delimeter); // Creates an array of fields separated by "," (a comma)
                 if (fields[1].equals("Sales")) {
                     continue; 
                 }
                 Integer sales = Integer.valueOf(fields[1]);
                 System.out.println(sales);
-                dataList.add(sales); //adds sales to dataList   
-            } //end of while loop
+                dataList.add(sales); // Adds sales to dataList   
+            } // End of while loop
             
-            reader.close(); //closes reader
+            reader.close(); // Closes reader
 
-        } //end of try block
+        } // End of try block
 
-        catch (FileNotFoundException ex) { //catch block for "FileNotFoundException" exception
+        catch (FileNotFoundException ex) { // Catch block for "FileNotFoundException" exception
             ex.printStackTrace();
         }
-        return dataList; //returns dataList
+        return dataList; // Returns dataList
     }
 
     /*
-    * Description:
+    * Description: Determines the first-digit frequencies of the sales data and checks for fraud
     * 
     * @author - Murphy Lee
+    * @param arr - A list containing all the sales numbers 
+    * @return digitFrequency - An array containing the percent frequencies of each digit (0 - 9)
     * */
     public static double[] checkSales(ArrayList<Integer> arr) {
-        int totalDigits = 0;            // Accumulator variable to help calculate frequency
-        int[] firstDigits = new int[9];   // Stores the number of occurences of each first  
-        double[] digitFrequency = new double[9];
-        
-        int digit;                        // Stores each first digit
+        int totalDigits = 0;                      // Accumulator variable to help calculate frequency
+        int[] firstDigits = new int[9];           // Stores the number of occurences of each first digit
+        double[] digitFrequency = new double[9];  // Stores the frequency of each digit
+        int digit;                                // Stores each first digit
 
         for (int salesNum : arr) {
             // Obtain the first digit of the sales number
@@ -174,30 +178,28 @@ public class CustomerSystem extends Application {
     }
 
     /* 
-     * Description: Takes a header and an array of doubles, and exports both to a CSV file
+     * Description: Writes data to a CSV file
      * 
      * @author - Naomi Mezheritsky
      * @throws FileNotFoundException - Exception raised when method tries to pass File to PrintWriter, thrown to start method
-     * @param arr - Array containing the double values (the digits in this case)
-     * @param header - The categories that go onto the top of the CSV
+     * @param arr - Array containing sales values
+     * @param header - The categories that go to the top of the CSV
      * */
     public static void exportPercentage(double[] arr, String header) throws FileNotFoundException {
         String fileName = "results.csv";     // Name of the results file
         // Open file
         File file = new File(fileName);
-
         // Pass file into printwriter
         PrintWriter writeFile = new PrintWriter(file);
-
         // Create the file header
         writeFile.println(header);
 
         // Loop through array values, printing results
-        for (int i = 0; i < arr.length; i++) {
-            writeFile.println((i + 1) + "," + arr[i]);     // Index starts at 0, so +1 needs to be added
-        }
+        for (int i = 0; i < arr.length; i++) {   // Start of for loop
+            writeFile.println((i + 1) + "," + arr[i]);     // Index starts at 0, so + 1 needs to be added
+        }  // End of for loop
 
-        writeFile.close();
+        writeFile.close();  // Closes PrintWriter
     }
 
     /*
@@ -233,6 +235,7 @@ public class CustomerSystem extends Application {
         while (num >= 10) {
             num /= 10;
         }
+
         // Return the digit
         return num;
     }
