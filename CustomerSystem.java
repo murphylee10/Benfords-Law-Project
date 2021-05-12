@@ -16,122 +16,50 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.List; 
 import java.util.Scanner;
 
 public class CustomerSystem extends Application {
     public static void main(String[] args) throws FileNotFoundException{
-        String userChoice;           // Which menu option the user has chosen
-        boolean keepGoing = true;    // Ensures that the while loop runs at least once
-
-        // Instantiate Scanner
-        Scanner reader = new Scanner(System.in);
-
-        // Loop through user options as long as the user wants to keep going
-        while (keepGoing == true) {
-            // Print user options and prompt input
-            printMenu();
-            userChoice = reader.nextLine();
-            
-            // Prompt the user for re-input as long as their choice is invalid (not a number from 1 - 3)
-            while (!(userChoice.equals("1") || userChoice.equals("2") || userChoice.equals("3"))) {
-                System.out.println("User input is invalid. Enter one of the choices (1 - 3): ");
-                userChoice = reader.nextLine();
-            }
-
-            // If the user entered 1 read data from the sales.csv file            
-            if (userChoice.equals("1")) {
-                getSalesData("sales.csv"); 
-                System.out.println(); //skips a line for aesthetic
-                System.out.println("Data has been loaded succesfully..."); //informs user data has been loaded
-                System.out.println(); //skips a line for aesthetic
-
-            }
-
-            // If the user entered 2, set the keepGoing variable to false
-            else if (userChoice.equals("2")) {
-                // Run the checkSales function and store the frequencies in an array
-                launch(args);
-            }
-
-            // Otherwise, the user entered 3 and wants to quit the program
-            else {
-                System.out.println("Goodbye!");
-                keepGoing = false;
-            }
-        }
-        reader.close();
-        System.exit(0);   // Closes the program if the user's graph stage still remains
-    }
-
-    /* 
-    * Description: Prints out the user options to the terminal
-    * 
-    * @author - Naomi Mezheritsky
-    * */
-    public static void printMenu() { //shows the user their options
-        System.out.println(); 
-        System.out.println("Please select one of the options: ");
-    	System.out.println("    1: Retrive sales data from the file");
-    	System.out.println("    2: Check for fraud in sales data and display results in a graph");
-    	System.out.println("    3: Quit");
+        // Launch the JavaFX application
+        launch(args);
+        System.out.println("Goodbye!");
     }
 
     /*
-    * Description: reads sales data and adds it to the list 
-    * 
-    * @author - Naomi Mezheritsky
-    * @param fileName - The file name of the file to be read
-    * */
-    public static List<Integer> getSalesData(String fileName) {
-        String delimeter = ","; //declares delimeter as a String
-        File f = new File(fileName); // initializes object of class File based on the given file name
-        List<Integer> dataList = new ArrayList<>(); //dataList is declared by a new ArrayList
-
-        try { //start of try block
-            Scanner reader = new Scanner(f);
-
-            //beginning of while loop	
-            while (reader.hasNext()) { //creates a loop for hasNext
-                String line = reader.nextLine();
-                String[] fields = line.split(delimeter); //creates an array of fields separated by "," (a comma)
-                if (fields[1].equals("Sales")) {
-                    continue; 
-                }
-                Integer sales = Integer.valueOf(fields[1]);
-                System.out.println(sales);
-                dataList.add(sales); //adds sales to dataList   
-            } //end of while loop
-            
-            reader.close(); //closes reader
-
-        } //end of try block
-
-        catch (FileNotFoundException ex) { //catch block for "FileNotFoundException" exception
-            ex.printStackTrace();
-        }
-        return dataList; //returns dataList
-    }
-
-    /*
-     * Description: Combination of the validation of user data with the visual representation of digit frequencies
+     * Description: Combination of reading the sales data, the validation of user data, and the visual representation of digit frequencies
      * 
-     * @author - Murphy Lee
+     * @author - Naomi Mezheritsky & Murphy Lee 
      * @throws FileNotFoundException - Passed by the exportPercentage() and checkSales() methods, thrown to main
      * @param primaryStage - The platform (window) used to draw on for JAVAFX applications
      * */
     @Override
     public void start(Stage primaryStage) throws FileNotFoundException {
-        String digitMark;    // Stores each digit as a string to be used as X-axis labels
-        String tableHeader;  // Table header of the CSV
+        // *MAIN PROGRAM SECTION*
 
-        // Find the frequency of each digit
-        double[] firstDigitFreq = checkSales();
+        ArrayList<Integer> salesData = new ArrayList<>();   // Stores the sales data for each postal code
+        String digitMark;    // Stores each digit as a string to be used as X-axis labels
+        String tableHeader;  // Table header of the CSV 
+
+        // Instantiate Scanner
+        Scanner reader = new Scanner(System.in);
+
+        // Print user options and prompt input
+        System.out.print("Enter name of the sales data file: ");
+        String salesName = reader.nextLine(); 
+
+        // Get the sales data and read the file's contents to the terminal
+        salesData = getSalesData(salesName);
+        System.out.println("Data has been loaded succesfully..."); // Informs user that data has been loaded
+
+        // Run the checkSales function and store the frequencies in an array
+        double[] firstDigitFreq = checkSales(salesData);
 
         // Export results to CSV file
         tableHeader = "Digit,Frequency(%)";
         exportPercentage(firstDigitFreq, tableHeader);
         System.out.println("Results successfully exported to 'results.csv'. Now loading graph...");
+
+        // *GRAPHICAL INTERFACE SECITON*
 
         // Set up the new stage
         primaryStage.setTitle("Benford's Law");
@@ -167,48 +95,68 @@ public class CustomerSystem extends Application {
         // Add scene to the stage, and display it to the screen
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        reader.close();
     }
+
+    /*
+    * Description: reads sales data and adds it to the list 
+    * 
+    * @author - Naomi Mezheritsky
+    * @param fileName - The file name of the file to be read
+    * */
+    public static ArrayList<Integer> getSalesData(String fileName) {
+        String delimeter = ","; //declares delimeter as a String
+        File f = new File(fileName); // initializes object of class File based on the given file name
+        ArrayList<Integer> dataList = new ArrayList<>(); //dataList is declared by a new ArrayList
+
+        try { //start of try block
+            Scanner reader = new Scanner(f);
+
+            //beginning of while loop	
+            while (reader.hasNext()) { //creates a loop for hasNext
+                String line = reader.nextLine();
+                String[] fields = line.split(delimeter); //creates an array of fields separated by "," (a comma)
+                if (fields[1].equals("Sales")) {
+                    continue; 
+                }
+                Integer sales = Integer.valueOf(fields[1]);
+                System.out.println(sales);
+                dataList.add(sales); //adds sales to dataList   
+            } //end of while loop
+            
+            reader.close(); //closes reader
+
+        } //end of try block
+
+        catch (FileNotFoundException ex) { //catch block for "FileNotFoundException" exception
+            ex.printStackTrace();
+        }
+        return dataList; //returns dataList
+    }
+
     /*
     * Description:
     * 
     * @author - Murphy Lee
-    * @throws FileNotFoundException - Exception raised when the program tries to read the CSV, thrown to start method
     * */
-    public static double[] checkSales() throws FileNotFoundException {
+    public static double[] checkSales(ArrayList<Integer> arr) {
         int totalDigits = 0;            // Accumulator variable to help calculate frequency
         int[] firstDigits = new int[9];   // Stores the number of occurences of each first  
         double[] digitFrequency = new double[9];
-        String fileName = "sales.csv";    // The file name of the CSV
-        String line;                      // Stores each line of the file
-        Scanner lineReader;               // Scanner takes in each line of the CSV
-        int salesNum;
+        
         int digit;                        // Stores each first digit
 
-        // Open the CSV file into the Scanner
-        File file = new File(fileName);
-        Scanner scanner = new Scanner(file);
-
-        scanner.nextLine();    // Skip the first line of the CSV (spreadsheet headers)
-
-        // Read the sales column of the CSV file, parsing the first digit and storing in an array  
-        while (scanner.hasNextLine() == true) {
-            // Read the next line of the file
-            line = scanner.nextLine();
-            // Store each line into the Scanner - use the useDelimiter() functon
-            lineReader = new Scanner(line);
-            lineReader.useDelimiter(",");
-            lineReader.next(); // Skip to the next token of the line (the sales number)
-
-            // Pass the sales value into nextInt
-            salesNum = lineReader.nextInt();
-            
+        for (int salesNum : arr) {
+            // Obtain the first digit of the sales number
             digit = getFirstDigit(salesNum);
-            
+
             // Increase the corresponding value of the array by 1
             firstDigits[digit - 1]++;
 
             totalDigits++;           // Add 1 to the accumulator vairable
         }
+
         // Calculate the frequency of each first digit
         digitFrequency = itemFrequency(firstDigits, totalDigits);
 
@@ -220,8 +168,6 @@ public class CustomerSystem extends Application {
         else {
             System.out.println("Fraud has occured");
         }
-
-        scanner.close();
 
         // Return array
         return digitFrequency;
