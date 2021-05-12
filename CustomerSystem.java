@@ -59,7 +59,9 @@ public class CustomerSystem extends Application {
         // Export results to CSV file
         tableHeader = "Digit,Frequency(%)";
         exportPercentage(firstDigitFreq, tableHeader);
+        System.out.println();                                      // Adding whitespace
         System.out.println("Results successfully exported to 'results.csv'. Now loading graph...");
+        System.out.println();                                      // Adding whitespace
 
         // *GRAPHICAL INTERFACE SECITON*
 
@@ -170,7 +172,7 @@ public class CustomerSystem extends Application {
             System.out.println("Fraud has most likely not occured :)");
         }
         else {
-            System.out.println("Fraud has occured");
+            System.out.println("Fraud may have occured");
         }
 
         // Return array
