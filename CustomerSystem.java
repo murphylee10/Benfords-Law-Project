@@ -49,9 +49,7 @@ public class CustomerSystem extends Application {
 
         // Get the sales data and read the file's contents to the terminal
         salesData = getSalesData(salesName);
-        System.out.println();                                      // Empty print line for aesthetic
-        System.out.println("Data has been loaded succesfully..."); // Informs user that data has been loaded
-        System.out.println();                                      // Empty print line for aesthetic
+        
 
         // Run the checkSales function and store the frequencies in an array
         double[] firstDigitFreq = checkSales(salesData);
@@ -130,6 +128,10 @@ public class CustomerSystem extends Application {
                 dataList.add(sales); // Adds sales to dataList   
             } // End of while loop
             
+            System.out.println();                                      // Empty print line for aesthetic
+            System.out.println("Data has been loaded succesfully..."); // Informs user that data has been loaded
+            System.out.println();                                      // Empty print line for aesthetic
+
             reader.close(); // Closes reader
 
         } // End of try block
